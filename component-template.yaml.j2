@@ -1,0 +1,47 @@
+metadata:
+  name: hugo-site-aws-s3website
+  description: Deploy a static Hugo website on an AWS S3 Website
+  language: Go
+  frameworks: hugo  # string or list
+  search-tags:
+    - hugo
+    - Go
+    - static website
+    - s3
+    - s3 website
+  source: https://github.com/cloudoria/hugo-site-aws-s3website/
+  license: GPLv3
+  author: fredrik@cloudoria.io
+
+parameters:
+  site-name:
+    prompt: What would you like to call your site (e.g. My Website)?
+    type: string
+
+  website-bucketname:
+    prompt: What would you like to call your S3 bucket website (e.g. example.com)?
+    type: string
+  
+files:
+  - readme.md:
+    source: readme.md.j2
+
+dependencies:
+  - hugo:
+    - not_found: Please install hugo, for more information visit https://gohugo.io
+
+setup-commands: # commands to be executed when the component is generated
+    - hugo new site {{ param.site-name }}
+
+build:
+    - hugo -D
+
+deployment:
+    # create s3 bucket website
+    - aws s3 mb {{ param.website-bucketname }}
+    - aws s3 website {{ param.website-bucketname }} --index-document index.html --error-document error.html
+    # upload static files from public/
+    - aws s3 sync public/* {{ param.website-bucketname }}
+
+decommission:
+    - aws s3 rb {{ param.website-bucketname }} --force
