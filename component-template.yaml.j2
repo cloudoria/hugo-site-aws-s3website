@@ -14,11 +14,11 @@ metadata:
   author: fredrik@cloudoria.io
 
 parameters:
-  site-name:
+  - site-name:
     prompt: What would you like to call your site (e.g. My Website)?
     type: string
 
-  website-bucketname:
+  - website-bucketname:
     prompt: What would you like to call your S3 bucket website (e.g. example.com)?
     type: string
   
@@ -28,20 +28,35 @@ files:
 
 dependencies:
   - hugo:
-    - not_found: Please install hugo, for more information visit https://gohugo.io
+    not_found: Please install hugo, for more information visit https://gohugo.io
 
-setup-commands: # commands to be executed when the component is generated
-    - hugo new site {{ param.site-name }}
+  - platform_specific:
+    docker:
+      image: gohugoio/hugo:latest
 
-build:
+# use these steps in project .yaml to build pipelines for your project, components, and stages based combinations of steps.
+steps:
+  setup:  # mandatory step
+    - hugo new site {{ param.site-name }}  # commands to be executed when the component is generated
+  
+  pre_setup_for_docker: 
+    - pip install awscli
+
+  build:
     - hugo -D
 
-deployment:
+  deploy:  # mandatory step
     # create s3 bucket website
     - aws s3 mb {{ param.website-bucketname }}
     - aws s3 website {{ param.website-bucketname }} --index-document index.html --error-document error.html
     # upload static files from public/
     - aws s3 sync public/* {{ param.website-bucketname }}
+  
+  run_this_only_in_test:
+    - curl https://someurl.s3website.amazon.com
+  
+  name_your_steps_to_your_taste:
+    - ls -al /
 
 decommission:
     - aws s3 rb {{ param.website-bucketname }} --force
