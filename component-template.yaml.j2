@@ -51,7 +51,7 @@ steps:
   deploy:  # mandatory step
     # create s3 bucket website
     - aws s3 mb {{ param.websitebucketname }}
-    - aws s3 website {{ param.website-bucketname }} --index-document index.html --error-document error.html
+    - aws s3 website {{ param.websitebucketname }} --index-document index.html --error-document error.html
     # upload static files from public/
     - aws s3 sync public/* {{ param.websitebucketname }}
   
