@@ -40,7 +40,7 @@ platform_specific_dependencies:
 # use these steps in project .yaml to build pipelines for your project, components, and stages based combinations of steps.
 steps:
   setup:  # mandatory step
-    - hugo new site {{ param.site-name }}  # commands to be executed when the component is generated
+    - hugo new site {{ param.sitename }}  # commands to be executed when the component is generated
   
   pre_setup_for_docker: 
     - pip install awscli
@@ -50,10 +50,10 @@ steps:
 
   deploy:  # mandatory step
     # create s3 bucket website
-    - aws s3 mb {{ param.website-bucketname }}
+    - aws s3 mb {{ param.websitebucketname }}
     - aws s3 website {{ param.website-bucketname }} --index-document index.html --error-document error.html
     # upload static files from public/
-    - aws s3 sync public/* {{ param.website-bucketname }}
+    - aws s3 sync public/* {{ param.websitebucketname }}
   
   run_this_only_in_test:
     - curl https://someurl.s3website.amazon.com
@@ -62,4 +62,4 @@ steps:
     - ls -al /
 
 decommission:
-    - aws s3 rb {{ param.website-bucketname }} --force
+    - aws s3 rb {{ param.websitebucketname }} --force
