@@ -30,9 +30,9 @@ dependencies:
   - hugo:
     not_found: Please install hugo, for more information visit https://gohugo.io
 
-  - platform_specific:
-    docker:
-      image: gohugoio/hugo:latest
+platform_specific_dependencies:
+  docker:
+    image: gohugoio/hugo:latest
 
 # use these steps in project .yaml to build pipelines for your project, components, and stages based combinations of steps.
 steps:
