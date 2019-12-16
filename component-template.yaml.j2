@@ -41,7 +41,7 @@ platform_specific_dependencies:
 steps:
   setup:  # mandatory step
     - hugo new site {{ param.sitename }}  # commands to be executed when the component is generated
-    - mv {{ param.sitename }}/* .
+    - cp -rf {{ param.sitename }}/* .
     - rm -rf {{ param.sitename }}
   
   pre_setup_for_docker: 
