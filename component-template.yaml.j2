@@ -41,6 +41,7 @@ platform_specific_dependencies:
 steps:
   setup:  # mandatory step
     - hugo new site {{ param.sitename }}  # commands to be executed when the component is generated
+    - ls -al # trying an additional command with comment after
   
   pre_setup_for_docker: 
     - pip install awscli
