@@ -40,9 +40,7 @@ platform_specific_dependencies:
 # use these steps in project .yaml to build pipelines for your project, components, and stages based combinations of steps.
 steps:
   setup:  # mandatory step
-    - hugo new site {{ param.sitename }}  # commands to be executed when the component is generated
-    - cp -rf {{ param.sitename }}/* .
-    - rm -rf {{ param.sitename }}
+    - hugo new site {{ param.sitename }} .  # commands to be executed when the component is generated
   
   pre_setup_for_docker: 
     - pip install awscli
