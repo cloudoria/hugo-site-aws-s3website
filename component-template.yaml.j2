@@ -41,6 +41,14 @@ platform_specific_dependencies:
 steps:
   setup:  # mandatory step
     - hugo new site {{ param.sitename }} .  # commands to be executed when the component is generated
+    - cp -r {{ param.sitename }}/archetypes .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/config.toml .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/content .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/data .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/layouts .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/static .  # workaround for broken * and subprocess
+    - cp -r {{ param.sitename }}/themes .  # workaround for broken * and subprocess
+    - rm -rf {{ param.sitename }}
   
   pre_setup_for_docker: 
     - pip install awscli
